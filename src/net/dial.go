@@ -11,6 +11,11 @@ import (
 	"time"
 )
 
+// Callback for Shadowsocks
+type DialCallback func(int)
+
+var Callback DialCallback
+
 // A Dialer contains options for connecting to an address.
 //
 // The zero value for each field is equivalent to dialing
