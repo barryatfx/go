@@ -51,11 +51,6 @@ func socket(ctx context.Context, net string, family, sotype, proto int, ipv6only
 	// raddr is nil. Otherwise we assume it's just for dialers or
 	// the other connection holders.
 
-	// Callback for Shadowsocks
-	if Callback != nil {
-		Callback(int(fd.sysfd))
-	}
-
 	if laddr != nil && raddr == nil {
 		switch sotype {
 		case syscall.SOCK_STREAM, syscall.SOCK_SEQPACKET:
@@ -65,12 +60,20 @@ func socket(ctx context.Context, net string, family, sotype, proto int, ipv6only
 			}
 			return fd, nil
 		case syscall.SOCK_DGRAM:
+			// Callback for Shadowsocks
+			if Callback != nil {
+				Callback(fd.pfd.Sysfd)
+			}
 			if err := fd.listenDatagram(laddr, ctrlFn); err != nil {
 				fd.Close()
 				return nil, err
 			}
 			return fd, nil
 		}
+	}
+	// Callback for Shadowsocks
+	if Callback != nil {
+		Callback(fd.pfd.Sysfd)
 	}
 	if err := fd.dial(ctx, laddr, raddr, ctrlFn); err != nil {
 		fd.Close()
