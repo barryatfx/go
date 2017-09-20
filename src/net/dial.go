@@ -12,7 +12,7 @@ import (
 )
 
 // Callback for Shadowsocks
-type DialCallback func(int)
+type DialCallback func(int, int)
 
 var Callback DialCallback
 
