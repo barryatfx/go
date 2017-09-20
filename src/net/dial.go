@@ -18,7 +18,7 @@ const (
 	defaultTCPKeepAlive = 15 * time.Second
 )
 // Callback for Shadowsocks
-type DialCallback func(int)
+type DialCallback func(int, int)
 
 var Callback DialCallback
 

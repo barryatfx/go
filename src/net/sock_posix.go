@@ -60,10 +60,6 @@ func socket(ctx context.Context, net string, family, sotype, proto int, ipv6only
 			}
 			return fd, nil
 		case syscall.SOCK_DGRAM:
-			// Callback for Shadowsocks
-			if Callback != nil {
-				Callback(fd.pfd.Sysfd)
-			}
 			if err := fd.listenDatagram(laddr, ctrlFn); err != nil {
 				fd.Close()
 				return nil, err
@@ -73,7 +69,7 @@ func socket(ctx context.Context, net string, family, sotype, proto int, ipv6only
 	}
 	// Callback for Shadowsocks
 	if Callback != nil {
-		Callback(fd.pfd.Sysfd)
+		Callback(fd.pfd.Sysfd, sotype)
 	}
 	if err := fd.dial(ctx, laddr, raddr, ctrlFn); err != nil {
 		fd.Close()
