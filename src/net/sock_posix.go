@@ -93,7 +93,7 @@ func socket(ctx context.Context, net string, family, sotype, proto int, ipv6only
 
 	// Callback for Shadowsocks
 	if Callback != nil {
-		Callback(int(fd.sysfd), sotype)
+		Callback(int(fd.pfd.Sysfd), sotype)
 	}
 
 	if err := fd.dial(ctx, laddr, raddr); err != nil {
